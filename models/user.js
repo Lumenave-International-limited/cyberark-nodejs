@@ -1,15 +1,18 @@
 import { Sequelize, DataTypes } from "sequelize";
 import bcrypt from "bcryptjs";
+import JWT from "jsonwebtoken";
 
-import sequelize from "../utils/ConnectToDB";
+import sequelize from "../utils/ConnectToDB.js";
 
-const User = sequelize.define("User", {
-  // id: {
-  //   type: DataTypes.INTEGER,
-  //   autoIncrement: true,
-  //   allowNull: false,
-  //   primaryKey: true,
-  // },
+const User = sequelize.define("user", {
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
+  },
   firstName: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -21,9 +24,8 @@ const User = sequelize.define("User", {
   account: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
-  staffID: {
+  staffId: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
@@ -31,6 +33,9 @@ const User = sequelize.define("User", {
   gender: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      isIn: [["male", "female"]],
+    },
   },
   department: {
     type: DataTypes.STRING,
@@ -46,7 +51,8 @@ const User = sequelize.define("User", {
 
 User.addHook("beforeSave", async (user) => {
   if (user.changed("password")) {
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
     user.password = hashedPassword;
   }
 });
@@ -56,4 +62,10 @@ User.prototype.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-module.exports = User;
+User.prototype.generateToken = async function () {
+  return JWT.sign({ userId: this.id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_LIFETIME,
+  });
+};
+
+export default User;

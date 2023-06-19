@@ -12,4 +12,5 @@ const sequelize = new Sequelize(
   { dialect: "postgres", host: process.env.HOST }
 );
 
-module.exports = sequelize;
+// module.exports = sequelize;
+export default sequelize;
