@@ -3,7 +3,7 @@ import User from "../models/user.js";
 import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
 import attachCookies from "../utils/attachCookies.js";
 
-// Controller for user registration
+// Register a new user
 
 const registerUser = async (req, res) => {
   const {
@@ -40,6 +40,7 @@ const registerUser = async (req, res) => {
     throw new BadRequestError("Email or staff ID already in use");
   }
 
+  // Create the new user
   const newUser = await User.create({
     email,
     firstName,
@@ -66,4 +67,36 @@ const registerUser = async (req, res) => {
   });
 };
 
-export { registerUser };
+// User login
+
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new BadRequestError("Please provide all values");
+  }
+
+  const user = await User.findOne({ where: { email } });
+
+  if (!user) {
+    throw new UnAuthenticatedError("Invalid Credentials");
+  }
+
+  const isPasswordCorrect = await user.comparePassword(password);
+
+  if (!isPasswordCorrect) {
+    throw new UnAuthenticatedError("Invalid Credentials");
+  }
+
+  const token = user.generateToken();
+
+  user.password = undefined;
+
+  attachCookies({ res, token });
+
+  res.status(StatusCodes.OK).json({
+    user,
+  });
+};
+
+export { registerUser, loginUser };
