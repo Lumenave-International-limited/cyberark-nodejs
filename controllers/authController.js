@@ -1,6 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 import User from "../models/user.js";
-import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnAuthenticatedError,
+} from "../errors/index.js";
 import attachCookies from "../utils/attachCookies.js";
 
 // Register a new user
@@ -16,8 +20,6 @@ const registerUser = async (req, res) => {
     department,
     password,
   } = req.body;
-
-  console.log(req.body);
 
   if (
     !email ||
@@ -89,6 +91,7 @@ const loginUser = async (req, res) => {
   }
 
   const token = user.generateToken();
+  console.log(token);
 
   user.password = undefined;
 
@@ -96,6 +99,71 @@ const loginUser = async (req, res) => {
 
   res.status(StatusCodes.OK).json({
     user,
+    token,
+  });
+};
+
+const updateUser = async (req, res) => {
+  const { email, firstName, lastName, staffId, gender, department, password } =
+    req.body;
+
+  if (!email || !firstName || !lastName || !staffId || !gender || !department) {
+    throw new BadRequestError("Please provide all values");
+  }
+
+  // Find the user by ID
+  const user = await User.findByPk(req.user.userId);
+
+  if (!user) {
+    throw new NotFoundError("User not Found");
+  }
+
+  // Update user details
+
+  user.firstName = firstName || user.firstName;
+  user.lastName = lastName || user.lastName;
+  user.staffId = staffId || user.staffId;
+  user.gender = gender || user.gender;
+  user.department = department || user.department;
+  user.email = email || user.email;
+
+  if (password) {
+    user.password = password;
+  }
+
+  await user.save();
+
+  const token = user.generateToken();
+
+  attachCookies({ res, token });
+
+  res.status(StatusCodes.OK).json({
+    user: {
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      staffId: user.staffId,
+      gender: user.gender,
+      department: user.department,
+    },
+  });
+};
+
+const getUserDetails = async (req, res) => {
+  const userId = req.user.userId;
+
+  console.log(userId);
+  const user = await User.findByPk(userId);
+
+  res.status(StatusCodes.OK).json({
+    user: {
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      staffId: user.staffId,
+      gender: user.gender,
+      department: user.department,
+    },
   });
 };
 
@@ -107,4 +175,4 @@ const logoutUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "user logged out" });
 };
 
-export { registerUser, loginUser, logoutUser };
+export { registerUser, loginUser, logoutUser, getUserDetails, updateUser };

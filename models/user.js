@@ -62,10 +62,11 @@ User.prototype.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-User.prototype.generateToken = async function () {
-  return JWT.sign({ userId: this.id }, process.env.JWT_SECRET, {
+User.prototype.generateToken = function () {
+  const token = JWT.sign({ userId: this.id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
+  return token;
 };
 
 export default User;

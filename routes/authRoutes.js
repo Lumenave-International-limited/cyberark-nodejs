@@ -10,7 +10,11 @@ import {
   registerUser,
   loginUser,
   logoutUser,
+  updateUser,
+  getUserDetails,
 } from "../controllers/authController.js";
+
+import authenticateUser from "../middleware/auth.js";
 // import { registerUser } from "../controllers/testAuthController.js";
 import express from "express";
 const router = express.Router();
@@ -18,5 +22,7 @@ const router = express.Router();
 router.route("/register").post(apiLimiter, registerUser);
 router.route("/login").post(apiLimiter, loginUser);
 router.route("/logout").get(logoutUser);
+router.route("/updateUser").patch(authenticateUser, updateUser);
+router.route("/getUserDetails").get(authenticateUser, getUserDetails);
 
 export default router;
