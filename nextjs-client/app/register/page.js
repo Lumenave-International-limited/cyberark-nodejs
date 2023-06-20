@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Alert, FormRow } from "../components/Index";
+import { useAppContext } from "../context/appContext";
 
 const initialState = {
   email: "",
@@ -13,13 +14,14 @@ const initialState = {
   gender: "",
   department: "",
   isMember: true,
-  showAlert: false,
 };
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
 
   // global state and useNavigate
+
+  const { isLoading, showAlert } = useAppContext();
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -40,7 +42,7 @@ const Register = () => {
         <h3 className="mb-4 border-b-4 border-black">
           {values.isMember ? "Login" : "Register"}
         </h3>
-        {values.showAlert && <Alert />}
+        {showAlert && <Alert />}
         {/* firstName Input */}
 
         {!values.isMember && (
