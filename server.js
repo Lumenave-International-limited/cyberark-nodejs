@@ -1,6 +1,7 @@
 // External imports
 
 import express from "express";
+import cors from "cors";
 
 const app = express();
 import dotenv from "dotenv";
@@ -32,13 +33,18 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
 app.use(xss());
 
+// app.get("/", (req, res) => {
+//   res.send("Welcome to Lumenave CyberArk Identity Application");
+// });
+
 app.get("/", (req, res) => {
-  res.send("Welcome to Lumenave CyberArk Identity Application");
+  res.json({ msg: "Welcome to Lumenave CyberArk Identity Application" });
 });
 
 app.use("/api/v1/auth", authRouter);
