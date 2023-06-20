@@ -21,21 +21,46 @@ const Register = () => {
 
   // global state and useNavigate
 
-  const { isLoading, showAlert } = useAppContext();
+  const { isLoading, showAlert, displayAlert } = useAppContext();
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
   };
 
   const handleChange = (e) => {
-    console.log(e.target);
+    setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const {
+      email,
+      firstName,
+      lastName,
+      password,
+      account,
+      staffId,
+      gender,
+      department,
+      isMember,
+    } = values;
 
-    console.log(e.target);
+    if (
+      !email ||
+      (!isMember && !firstName) ||
+      (!isMember && !lastName) ||
+      !password ||
+      (!isMember && !account) ||
+      (!isMember && !staffId) ||
+      (!isMember && !gender) ||
+      (!isMember && !department)
+    ) {
+      displayAlert();
+      return;
+    }
+    console.log(values);
   };
+
   return (
     <div className="mx-auto my-40 text-center ">
       <form onSubmit={handleSubmit}>
@@ -114,17 +139,6 @@ const Register = () => {
             handleChange={handleChange}
           />
         )}
-
-        {/* department Input */}
-        {!values.isMember && (
-          <FormRow
-            type="text"
-            name="department"
-            value={values.department}
-            handleChange={handleChange}
-          />
-        )}
-
         <button
           type="submit"
           className="bg-black text-white py-2 px-4 rounded-lg"
