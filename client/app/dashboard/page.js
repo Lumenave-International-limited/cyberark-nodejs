@@ -9,7 +9,7 @@ const Dashboard = () => {
   const { user } = useAppContext();
 
   useLayoutEffect(() => {
-    if (!user) route.push("/register");
+    if (!user) route.push("/not-authorized");
   }, [user, route]);
 
   return <div>Dashboard</div>;
