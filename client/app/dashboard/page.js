@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const route = useRouter();
-  const { user } = useAppContext();
+  const { user, logoutUser } = useAppContext();
 
   useLayoutEffect(() => {
     if (!user) route.push("/not-authorized");
@@ -21,6 +21,13 @@ const Dashboard = () => {
       <p>{user?.firstName}</p>
       <p>{user?.lastName}</p>
       <p>{user?.department}</p>
+
+      <button
+        className="bg-black py-2 px-4 text-white rounded-lg mt-5"
+        onClick={logoutUser}
+      >
+        Logout
+      </button>
     </div>
   );
 };
