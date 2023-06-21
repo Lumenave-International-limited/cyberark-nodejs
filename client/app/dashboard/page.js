@@ -29,10 +29,6 @@ const Dashboard = () => {
       >
         Logout
       </button>
-      <FontAwesomeIcon
-        icon={faAmbulance}
-        style={{ fontSize: 100, color: "orange" }}
-      />
     </div>
   );
 };
