@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
-
-import React from "react";
+import { useEffect, useLayoutEffect } from "react";
+import { useAppContext } from "../context/appContext";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
+  const route = useRouter();
+  const { user } = useAppContext();
+
+  useLayoutEffect(() => {
+    if (!user) route.push("/register");
+  }, [user, route]);
+
   return <div>Dashboard</div>;
 };
 
