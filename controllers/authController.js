@@ -66,6 +66,7 @@ const registerUser = async (req, res) => {
       gender: newUser.gender,
       department: newUser.department,
     },
+    token,
   });
 };
 

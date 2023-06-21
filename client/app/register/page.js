@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Alert, FormRow } from "../components/Index";
 import { useAppContext } from "../context/appContext";
+import { useRouter } from "next/navigation";
 
 const initialState = {
   email: "",
@@ -17,11 +18,13 @@ const initialState = {
 };
 
 const Register = () => {
+  const route = useRouter();
   const [values, setValues] = useState(initialState);
 
   // global state and useNavigate
 
-  const { isLoading, showAlert, displayAlert, registerUser } = useAppContext();
+  const { user, isLoading, showAlert, displayAlert, registerUser } =
+    useAppContext();
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -75,6 +78,14 @@ const Register = () => {
       registerUser(currentUser);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        route.push("/dashboard");
+      }, 3000);
+    }
+  }, [user, route]);
 
   return (
     <div className="mx-auto my-40 text-center ">
