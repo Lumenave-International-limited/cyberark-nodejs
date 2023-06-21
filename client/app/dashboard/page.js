@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect } from "react";
 import { useAppContext } from "../context/appContext";
 import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Dashboard = () => {
   const route = useRouter();
@@ -28,6 +29,10 @@ const Dashboard = () => {
       >
         Logout
       </button>
+      <FontAwesomeIcon
+        icon={faAmbulance}
+        style={{ fontSize: 100, color: "orange" }}
+      />
     </div>
   );
 };
