@@ -4,13 +4,13 @@ import express from "express";
 import cors from "cors";
 
 const app = express();
-import dotenv from "dotenv";
-dotenv.config();
 
 import "express-async-errors";
 
 import morgan from "morgan";
 
+import dotenv from "dotenv";
+dotenv.config();
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import path from "path";
@@ -21,7 +21,11 @@ import cookieParser from "cookie-parser";
 
 // Routes
 
+import sequelize from "./utils/ConnectToDB.js";
 import authRouter from "./routes/authRoutes.js";
+
+// Synchronize models with the database
+sequelize.sync();
 
 // Middlewares
 

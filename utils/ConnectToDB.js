@@ -5,12 +5,17 @@ dotenv.config();
 
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize(
-  process.env.DATABASE,
-  process.env.USERNAME,
-  process.env.PASSWORD,
-  { dialect: "postgres", host: process.env.HOST }
-);
+// With Provisioned Database
+const sequelize = new Sequelize(process.env.DATABASE_URL);
+
+// With Local Database
+
+// const sequelize = new Sequelize(
+//   process.env.DATABASE,
+//   process.env.USERNAME,
+//   process.env.PASSWORD,
+//   { dialect: "postgres", host: process.env.HOST }
+// );
 
 // module.exports = sequelize;
 export default sequelize;
