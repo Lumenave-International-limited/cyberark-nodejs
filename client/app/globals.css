@@ -87,7 +87,6 @@ span{
 
 .profile{
   width: 50%;
-  height: 60vh;
   margin: 0 auto;
   box-shadow: 1px 1px 10px lightgrey;
   padding: 20px;
@@ -102,4 +101,8 @@ span{
   height: 60px;
   box-shadow: 1px 1px 5px lightgrey;
   border-radius: 50%;
+}
+
+.btnx:hover{
+  box-shadow: none;
 }
