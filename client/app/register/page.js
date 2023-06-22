@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import { Alert, FormRow } from "../components/Index";
 import { useAppContext } from "../context/appContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const initialState = {
   email: "",
@@ -89,7 +92,15 @@ const Register = () => {
 
   return (
     <div className="register">
-      <div className="row">
+      <div className="row p-5">
+        <div className="logo">
+          <Link href={"/"}>
+            <FontAwesomeIcon
+              icon={faHouse}
+              style={{ fontSize: 40, color: "#3B71CA" }}
+            />
+          </Link>
+        </div>
         <div className="col-6 p-5">
           <div className="form p-3">
             <div className="form-body">
@@ -179,7 +190,7 @@ const Register = () => {
                   className="btn"
                   disabled={isLoading}
                 >
-                  {values.isMember ? "Register" : "Login"}
+                  {values.isMember ? <span>Register</span> : <span>Login</span>}
                 </button>
               </p>
             </div>
